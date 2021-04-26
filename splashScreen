@@ -1,0 +1,57 @@
+/* drawBitmoji function Declaration */
+var drawBitmojiHead = function(xPos, yPos, Height) //draws bitmoji head
+{noStroke();
+fill(234, 192, 134); //skin tone
+ellipse(xPos, yPos, Height / 150 * 83, Height / 150 * 100); //head
+fill(255, 255, 255);
+fill(133, 69, 17); //brown hair
+quad(xPos-(Height / 150 * 42), yPos-(Height / 150 * 3), xPos-(Height / 150 * 37), yPos-(Height / 150 * 35), xPos-(Height / 150 * 10), yPos-(Height / 150 * 51), xPos-(Height / 150 * 34), yPos-(Height / 150 *3)); //left hair
+quad(xPos+(Height / 150 * 43),yPos-(Height / 150 * 7),xPos+(Height / 150 * 34), yPos-(Height / 150 * 32),xPos+(Height / 150 * 18),yPos-(Height / 150 *46 ),xPos+(Height / 150 * 30),yPos-(Height / 150 * 11)); //right hair
+ellipse(xPos,yPos-(Height / 150 * 38), Height / 150 * 45, Height / 150 * 28); //top hair
+fill(71, 46, 7); //eye color
+ellipse(xPos-(Height / 150 * 10), yPos, Height / 150 * 6, Height / 150 * 4); //left eye
+ellipse(xPos+(Height / 150 *13), yPos, Height / 150 * 6, Height / 150 * 4); //right eye
+stroke(0, 0, 0);
+fill(234, 192, 134); //skin tone
+strokeWeight(Height / 150 * 1);
+bezier(xPos+(Height / 150 * 1), yPos+(Height / 150 * 3), xPos+(Height / 150 * 23),yPos+(Height / 150 * 25), xPos-(Height / 150 * 9), yPos+(Height / 150 * 25), xPos, yPos+(Height / 150 * 12)); //nose
+fill(255, 255, 255); //fill teeth
+arc(xPos+(Height / 150 * 3),yPos+(Height / 150 * 25), Height / 150 * 30, Height/ 150 * 13, 1, 180); //mouth
+line(xPos-(Height / 150 * 12),yPos+(Height / 150 * 25),xPos+(Height / 150 * 19), yPos+(Height / 150 * 24)); //top of mouth
+stroke(77, 19, 5); //eyebrow color
+strokeWeight(Height / 150 * 2); //eye brow thickness
+line(xPos-(Height / 150 * 1), yPos-(Height / 150 * 6), xPos-(Height / 150 * 21), yPos-(Height / 150 * 7)); //left eye brow
+line(xPos+(Height / 150 * 22),yPos-(Height / 150 * 9),xPos+(Height / 150 * 7),yPos-(Height / 150 * 7)); //right eye brow
+};
+
+//draws bitmoji body
+var drawBitmojiBody = function(xPos, yPos, Height)
+{noStroke();
+fill(234, 192, 134); //skin tone
+rect(xPos+(Height / 150 * -27),yPos+(Height / 150 * 37),Height / 150 * 56, Height / 150 * 28); //neck
+fill(120, 171, 32);
+rect(xPos-(Height / 150 * 47), yPos+(Height / 150 * 50),  Height / 150 * 99, Height / 150 * 99); //shirt
+arc(xPos-(Height / 150 * 38), yPos+(Height / 150 * 88), Height / 150 * 62, Height / 150 * 86, 193, 345); //left shoulder
+arc(xPos+(Height / 150 * 44),yPos+(Height / 150 * 85), Height / 150 * 58, Height / 150 * 82, 222, 348); //right shoulder
+fill(237, 215, 12);
+textSize(Height / 150 * 22);
+text("ES", xPos+(Height / 150 * 9), yPos+(Height / 150 * 85));
+};
+
+//draws complete bitmoji
+var drawBitmoji = function(xPos, yPos, Height)
+{   drawBitmojiHead(xPos, yPos, Height);
+    drawBitmojiBody(xPos, yPos, Height);
+};
+
+var splashScreen = function(){
+    background(255, 153, 0);
+    drawBitmoji(316, 162, 150);
+    fill(0, 0, 0);
+    textSize(30);
+    text("Air Hockey Game", 83, 50);
+    text("Hanci & Sadowski", 83, 389);
+};
+
+splashScreen();
+
