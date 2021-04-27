@@ -1,0 +1,252 @@
+var npc = height/2;//the npc computer
+var user = height/2;//the palyer or user 
+var goal1 = 0;//this is the score count for the first player
+var goal2 = 0;//this is the score for the npc
+var ball;// this is the object that will go in the goal
+var gameStarted = false;//tells if the game has started
+var t = 0;
+var timeStoped = 60;
+var movement = 17;//this control how fast the perosn goes
+var puckPace = 6;//this is how fast the puck goes
+var playery = 19;//the y postion for the character
+var playerx = 71;//the x psotion for the character
+angleMode = "degrees";
+var Ball = function(position, speed) {
+    this.position = position;//this the postiton of the puck
+    this.speed = speed || puckPace;// this control the spped of the puck
+    this.radius = 15;//the size of the puck
+    //this control the direction of the puck
+    this.resetVelocity = function() {
+        this.theta = random(0, 394);
+        this.velocity = new PVector(
+        this.speed*cos(this.theta), -this.speed*sin(this.theta));//this is the angle of the puck 
+        user = width/2;
+    };
+    this.resetVelocity();// this resets the volicty when it gets touched
+    
+    this.draw = function() {
+        fill(0, 0, 0);//this draws the puck
+        noStroke();
+        ellipse(this.position.x, this.position.y,
+        this.radius*2, this.radius*2);//this allows the puck to be constanly movingin diffrent directions
+    };
+// if the puck touches the player it will bounce off
+    this.collideWithPaddle = function(x, y) {
+        if (this.position.y - this.radius < y + playery/2 &&
+        this.position.y + this.radius > y - playery/2) {
+            if (dist(0, this.position.x, 0, x) <
+            playerx/2 + this.radius) {
+                if (this.position.y > y) {
+                    this.position.y = y + 
+                    this.radius + playery/2;
+                }//if the puck touches this certian postion if will cbounce off
+           else if (this.position.y < y) {
+                    this.position.y = y - 
+                    this.radius - playery/2;
+           }// if the puck touches the certain pottion it will bounce off
+           
+           this.velocity.mult(new PVector(1, -1));// make it that it will have a new direction and bounce somewhere diffrent
+            }
+       
+        }
+        
+    };
+    //this will make it so that when the ball touches x or y it does things ompleted
+    this.update = function() {
+        //Handle wall collisions
+       if (this.position.y < 0) {
+            goal2++;//if the puck touches this side of the goal npc will score
+            this.position = new PVector(width/2, height/2);//thid will tell if the puck touched it
+            gameStarted = false;//will restart the game
+            this.resetVelocity();//reset the direction tis going
+        }
+        else if (this.position.y > width) {
+            goal1++;//player 1 socres or user
+            this.position = new PVector(width/2, height/2);//puts a new puck at the beginniing
+            gameStarted = false;//restarts the game
+            this.resetVelocity();//reserts the direction of the puck
+        } 
+       //theses are the area that make it so that the puck counces off
+        if (this.position.x < 0) {
+            this.position.x = 0;
+            this.velocity.mult(new PVector(-1,1));
+        }
+        else if (this.position.x > width) {
+            this.position.x = width;
+            this.velocity.mult(new PVector(-1,1));
+        }
+        
+        //Handle paddle collisions
+        this.collideWithPaddle(npc, 20);//tells the user to work when hit
+        this.collideWithPaddle(user, width-20);
+        
+        this.position.add(this.velocity);//give the puck veloicty so that it can change direction
+    };
+};// controll all the prorperies of the ball and game inclding the direction of puck and scoring
+ball = new Ball(new PVector(width/2, height/2));
+var npcmove = function() {
+    if (abs(user-ball.position.x) < movement){
+        user = ball.position.x;//this tells the x postion of ball toucnhes
+    }
+    else if (user-ball.position.x >= movement) {
+        user -= movement;
+    }// this is the right movement
+    else if (user-ball.position.x <= movement) {
+        user += movement;// this is the x movement that follows the ball
+    }
+    
+};
+var drawScores = function() {
+    var s;// the var for the count not a constant
+    
+    fill(0, 0, 0);//color for the text
+    textSize(21);//side of the text
+    
+    s = "User: " + goal1;//this si the score count for the first charcter
+    text(s, width*0.01-textWidth(s)/55, 52);//text prop for the count 
+    s = "Npc: " + goal2;//score count for the second thats on screen
+    text(s, width*-0.01-textWidth(s)/-74, 326);//text prop for the goal count
+};//the properties for the scores
+//Move the player down
+var movePlayerDown = function() {
+    npc += movement;
+};
+//Move the player up
+var movePlayerUp = function() {
+    npc -= movement;
+};
+// the hockhead for the player 1
+var hockeyhead = function(x,y,stanH) {
+noStroke();
+fill(255, 0, 0);
+ellipse(x+stanH/100,y+stanH/100,83*stanH/100,100*stanH/100); //head
+
+fill(255, 255, 255);
+ellipse(x+stanH/-114*19,y+stanH/-16,24*stanH/116,21*stanH/105);
+ellipse(x+stanH/-117*-21,y+stanH/-16,24*stanH/116,21*stanH/105);
+
+
+fill(255, 255, 255);
+
+fill(0, 0, 0);
+
+
+
+fill(15, 15, 15);
+ellipse(x+stanH/-121*19,y+stanH/-29,16*stanH/116,-11*stanH/105);
+ellipse(x+stanH/-77*19,y+stanH/7,8*stanH/116,16*stanH/105);
+ellipse(x+stanH/-146*19,y+stanH/7,8*stanH/116,16*stanH/105);
+ellipse(x+stanH/61*19,y+stanH/7,8*stanH/116,16*stanH/105);
+ellipse(x+stanH/300*19,y+stanH/7,8*stanH/116,16*stanH/105);
+ellipse(x+stanH/283*19,y+stanH/7,8*stanH/116,16*stanH/105);
+ellipse(x+stanH/94*19,y+stanH/7,8*stanH/116,16*stanH/105);
+ellipse(x+stanH/100*19,y+stanH/-38,17*stanH/116,16*stanH/141);
+ellipse(x+stanH/149*19,y+stanH/3,8*stanH/103,16*stanH/105);
+ellipse(x+stanH/-240*19,y+stanH/3,8*stanH/103,16*stanH/105);
+ellipse(x+stanH/-90*19,y+stanH/3,8*stanH/103,16*stanH/105);
+ellipse(x+stanH/73*19,y+stanH/3,8*stanH/103,16*stanH/105);
+fill(0, 0, 0);
+};
+//the hockeyhead for the npc 
+var hockeyhead2 = function(x,y,stanH) {
+noStroke();
+fill(43, 0, 255);
+ellipse(x+stanH/100,y+stanH/100,83*stanH/100,100*stanH/100); //head
+
+fill(255, 255, 255);
+ellipse(x+stanH/-114*19,y+stanH/-16,24*stanH/116,21*stanH/105);
+ellipse(x+stanH/-117*-21,y+stanH/-16,24*stanH/116,21*stanH/105);
+
+
+fill(255, 255, 255);
+
+fill(0, 0, 0);
+
+
+
+fill(15, 15, 15);
+ellipse(x+stanH/-121*19,y+stanH/-29,16*stanH/116,-11*stanH/105);
+ellipse(x+stanH/-77*19,y+stanH/7,8*stanH/116,16*stanH/105);
+ellipse(x+stanH/-146*19,y+stanH/7,8*stanH/116,16*stanH/105);
+ellipse(x+stanH/61*19,y+stanH/7,8*stanH/116,16*stanH/105);
+ellipse(x+stanH/300*19,y+stanH/7,8*stanH/116,16*stanH/105);
+ellipse(x+stanH/283*19,y+stanH/7,8*stanH/116,16*stanH/105);
+ellipse(x+stanH/94*19,y+stanH/7,8*stanH/116,16*stanH/105);
+ellipse(x+stanH/100*19,y+stanH/-38,17*stanH/116,16*stanH/141);
+ellipse(x+stanH/149*19,y+stanH/3,8*stanH/103,16*stanH/105);
+ellipse(x+stanH/-240*19,y+stanH/3,8*stanH/103,16*stanH/105);
+ellipse(x+stanH/-90*19,y+stanH/3,8*stanH/103,16*stanH/105);
+ellipse(x+stanH/73*19,y+stanH/3,8*stanH/103,16*stanH/105);
+fill(0, 0, 0);
+};
+//what allows the players to move left and right
+var drawPlayers = function() {
+    //Constrain the player movement
+    hockeyhead2(user, 373, playerx, playery);//the head of the user thats able to control
+    hockeyhead(npc, 13, playerx, playery);//makes it able to control npc
+    npc = constrain(npc, 0, 400);//this controlls that thr x does not go off the screen
+};
+
+draw = function() {
+    //Control Player 1
+    if (keyIsPressed) {
+        if (keyCode === 37){
+            movePlayerUp(); 
+        }
+        else if (keyCode === 39) {
+            movePlayerDown();
+        }
+       
+    } 
+
+  var   drawGame=function(){
+    //Draw the environment
+    background(240, 228, 240);
+     fill(189, 36, 36);
+    ellipse(200,198,108,101);
+    fill(240, 235, 235);
+    ellipse(200,198,93,89);
+    fill(94, 0, 255);
+    ellipse(199,198,80,72);
+    fill(94, 0, 255);
+    ellipse(55,87,47,48);
+    fill(94, 0, 255);
+    ellipse(361,86,47,48);
+    fill(255, 0, 0);
+    ellipse(360,354,47,48);
+    fill(255, 0, 0);
+    ellipse(57,354,47,48);
+    fill(255, 255, 255);
+    ellipse(57,354,38,44);
+    fill(255, 255, 255);
+    ellipse(359,354,38,44);
+    fill(255, 255, 255);
+    ellipse(363,86,38,44);
+    fill(255, 255, 255);
+    ellipse(54,86,38,44);
+    fill(5, 5, 5);
+    stroke(140, 130, 140);
+    rect(75,5,272,18);
+    rect(74,392,272,18);
+    rect(410,199,-518,-9);
+    npcmove();
+    drawPlayers();
+    drawScores();
+    stroke(255, 255, 255);
+    line(width/2, 0, width/2, height);
+};
+    drawGame();
+    //Draw the ball
+    ball.draw();
+    
+    if (!gameStarted) {
+        t++;
+        if (t >= timeStoped) {
+            t = 0;
+            gameStarted = true;
+        }
+        return;
+    }
+    
+    ball.update();
+};
